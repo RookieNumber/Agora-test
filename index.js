@@ -1,108 +1,114 @@
-import AgoraRTC from "agora-rtc-sdk-ng";
-
-let rtc = {
-    localAudioTrack: null,
-    localVideoTrack: null,
-    client: null,
-};
-
+ 
 let options = {
     // Pass your App ID here.
     appId: "2a9d37abf9d44d668f0f305a150a7f67",
     // Set the channel name.
-    channel: "7d72365eb983485397e3e3f9d460bdda",
+    channel: "testing",
     // Pass your temp token here.
-    token: "007eJxTYDi1ZGsY2x9P+ej7V7Yt+nVtEqePFcutjqad0byLHUpnN3cpMBglWqYYmycmpVmmmJikmJlZpBmkGRuYJhqaGiSap5mZm3nxJQvwMTBc9jvJxMjAyMACxCA+E5hkBpMsYFKBwTzF3MjYzDQ1ydLC2MTC1NjSPNU41RhksplBUkpKIiODAQBKxCXH",
+    token: "007eJxTYPjgz3G61S5/wQTm9VNswyZk+K236e5WPDg/d9n1s3phd+4qMBglWqYYmycmpVmmmJikmJlZpBmkGRuYJhqaGiSap5mZz84QS5bYJZ5c4mrEwsgAgSA+O0NJanFJZl46AwMAvkwhHA==",
     // Set the user ID.
     uid: 0,
-};
-
-async function startBasicCall() {
-    // Create an AgoraRTCClient object.
-    rtc.client = AgoraRTC.createClient({mode: "rtc", codec: "vp8"});
-
-    // Listen for the "user-published" event, from which you can get an AgoraRTCRemoteUser object.
-    rtc.client.on("user-published", async (user, mediaType) => {
-        // Subscribe to the remote user when the SDK triggers the "user-published" event
+  };
+  
+  let rtc = {
+    client: null,
+    localAudioTrack: null,
+    localVideoTrack: null,
+  };
+  
+  const btnCam = document.getElementById("btnCam");
+  const btnMic = document.getElementById("btnMic");
+  const btnStart = document.getElementById("btnStart");
+  const btnStop = document.getElementById("btnStop");
+  const me = document.getElementById("me");
+  const remote = document.getElementById("remote");
+  
+  const join = async () => {
+    rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+    return await rtc.client.join(
+      options.appId,
+      options.channel,
+      options.token,
+      null
+    );
+  };
+  
+  async function startBasicCall() {
+    join().then(() => {
+      startVideo();
+      startAudio();
+  
+      rtc.client.on("user-published", async (user, mediaType) => {
+        if (rtc.client._users.length > 1) {
+          roomFull();
+        }
+  
         await rtc.client.subscribe(user, mediaType);
-        console.log("subscribe success");
-
-        // If the remote user publishes a video track.
+        remote.classList.remove("waiting");
+  
         if (mediaType === "video") {
-            // Get the RemoteVideoTrack object in the AgoraRTCRemoteUser object.
-            const remoteVideoTrack = user.videoTrack;
-            // Dynamically create a container in the form of a DIV element for playing the remote video track.
-            const remotePlayerContainer = document.createElement("div");
-            // Specify the ID of the DIV container. You can use the uid of the remote user.
-            remotePlayerContainer.id = user.uid.toString();
-            remotePlayerContainer.textContent = "Remote user " + user.uid.toString();
-            remotePlayerContainer.style.width = "640px";
-            remotePlayerContainer.style.height = "480px";
-            document.body.append(remotePlayerContainer);
-
-            // Play the remote video track.
-            // Pass the DIV container and the SDK dynamically creates a player in the container for playing the remote video track.
-            remoteVideoTrack.play(remotePlayerContainer);
+          const remoteVideoTrack = user.videoTrack;
+          remoteVideoTrack.play("remote");
         }
-
-        // If the remote user publishes an audio track.
+  
         if (mediaType === "audio") {
-            // Get the RemoteAudioTrack object in the AgoraRTCRemoteUser object.
-            const remoteAudioTrack = user.audioTrack;
-            // Play the remote audio track. No need to pass any DOM element.
-            remoteAudioTrack.play();
+          const remoteAudioTrack = user.audioTrack;
+          remoteAudioTrack.play();
         }
-
-        // Listen for the "user-unpublished" event
-        rtc.client.on("user-unpublished", user => {
-            // Get the dynamically created DIV container.
-            const remotePlayerContainer = document.getElementById(user.uid);
-            // Destroy the container.
-            remotePlayerContainer.remove();
-        });
+      });
     });
-
-    window.onload = function () {
-        document.getElementById("join").onclick = async function () {
-            // Join an RTC channel.
-            await rtc.client.join(options.appId, options.channel, options.token, options.uid);
-            // Create a local audio track from the audio sampled by a microphone.
-            rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-            // Create a local video track from the video captured by a camera.
-            rtc.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
-            // Publish the local audio and video tracks to the RTC channel.
-            await rtc.client.publish([rtc.localAudioTrack, rtc.localVideoTrack]);
-            // Dynamically create a container in the form of a DIV element for playing the local video track.
-            const localPlayerContainer = document.createElement("div");
-            // Specify the ID of the DIV container. You can use the uid of the local user.
-            localPlayerContainer.id = options.uid;
-            localPlayerContainer.textContent = "Local user " + options.uid;
-            localPlayerContainer.style.width = "640px";
-            localPlayerContainer.style.height = "480px";
-            document.body.append(localPlayerContainer);
-
-            // Play the local video track.
-            // Pass the DIV container and the SDK dynamically creates a player in the container for playing the local video track.
-            rtc.localVideoTrack.play(localPlayerContainer);
-            console.log("publish success!");
-        };
-
-        document.getElementById("leave").onclick = async function () {
-            // Destroy the local audio and video tracks.
-            rtc.localAudioTrack.close();
-            rtc.localVideoTrack.close();
-
-            // Traverse all remote users.
-            rtc.client.remoteUsers.forEach(user => {
-                // Destroy the dynamically created DIV containers.
-                const playerContainer = document.getElementById(user.uid);
-                playerContainer && playerContainer.remove();
-            });
-
-            // Leave the channel.
-            await rtc.client.leave();
-        };
-    };
-}
-
-startBasicCall();
+    btnStop.classList.remove("hidden");
+    btnStart.classList.add("hidden");
+  }
+  
+  btnStop.addEventListener("click", () => {
+    leave();
+  });
+  btnStart.addEventListener("click", () => {
+    startBasicCall();
+  });
+  btnCam.addEventListener("click", () => {
+    btnCam.classList.contains("active") ? stopVideo() : startVideo();
+  });
+  btnMic.addEventListener("click", () => {
+    btnMic.classList.contains("active") ? stopAudio() : startAudio();
+  });
+  
+  const roomFull = () => {
+    leave();
+    remote.classList.add("full");
+  };
+  
+  const leave = () => {
+    stopVideo();
+    stopAudio();
+    rtc.client.leave();
+    btnStop.classList.add("hidden");
+    btnStart.classList.remove("hidden");
+  };
+  
+  const stopAudio = () => {
+    rtc.localAudioTrack.close();
+    rtc.client.unpublish(rtc.localAudioTrack);
+    btnMic.classList.remove("active");
+  };
+  
+  const startAudio = async () => {
+    rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+    rtc.client.publish(rtc.localAudioTrack);
+    btnMic.classList.add("active");
+  };
+  
+  const stopVideo = () => {
+    rtc.localVideoTrack.close();
+    rtc.client.unpublish(rtc.localVideoTrack);
+    btnCam.classList.remove("active");
+  };
+  const startVideo = async () => {
+    me.classList.add("connecting");
+    rtc.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
+    rtc.client.publish(rtc.localVideoTrack);
+    me.classList.remove("connecting");
+    rtc.localVideoTrack.play("me");
+    btnCam.classList.add("active");
+  };
