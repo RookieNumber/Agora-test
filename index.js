@@ -1,13 +1,13 @@
  
 let options = {
     // Pass your App ID here.
-    appId: "2a9d37abf9d44d668f0f305a150a7f67",
+    appId: "8b5f82bf812a46489a7da10dfdf5c774",
     // Set the channel name.
     channel: "testing",
     // Pass your temp token here.
-    token: "007eJxTYPjgz3G61S5/wQTm9VNswyZk+K236e5WPDg/d9n1s3phd+4qMBglWqYYmycmpVmmmJikmJlZpBmkGRuYJhqaGiSap5mZz84QS5bYJZ5c4mrEwsgAgSA+O0NJanFJZl46AwMAvkwhHA==",
+    token: "007eJxTYPBenbT9/oEdut77Z5vqzDhh6nrgplyi/q/ZS7ekhN/iEjNSYDBKtEwxNk9MSrNMMTFJMTOzSDNIMzYwTTQ0NUg0TzMz5/qpmNztpZy8ZY4IEyMDBIL47AwlqcUlmXnpDAwAxpohQg==",
     // Set the user ID.
-    uid: 0,
+    uid: null,
   };
   
   let rtc = {

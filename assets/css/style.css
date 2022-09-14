@@ -12,41 +12,65 @@ body {
   place-items: center;
   min-height: 100vh;
   width: 100%;
-  background: rgba(241, 91, 181, 0.1215686275);
+  background-color: rgb(206, 206, 206);
 }
 
 .container {
-  display: flex;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  flex-direction: column;
-  padding: 1rem;
-}
-.container header {
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  font-weight: bold;
-}
-.container header i {
-  color: #00f5d4;
+  width: 400px;
+  background-color: black;
 }
 
-.hidden {
+.content {
+  width: 100%;
+}
+
+.navbar {
+  background-color: #92140C;
+  width: 100%;
+  height: 81px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: min-content;
+  gap: 10px;
+}
+
+.nav-title button {
+  background-color: transparent;
+  border: none;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.nav-btn button {
+  background-color: transparent;
+  border: none;
+}
+
+
+.call-btn-hidden {
   display: none !important;
 }
 
 .holder {
-  border-radius: 15px;
-  background: #ff0000;
+  background-color: transparent;
   width: 100%;
-  min-height: 50px;
-  border: 1px solid #333;
+  border: none;
 }
 .holder--video {
   position: relative;
   overflow: hidden;
-  margin-bottom: 0.5rem;
   min-height: 500px;
   color: #fee440;
 }
@@ -54,12 +78,11 @@ body {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
-  width: 150px;
-  height: 150px;
+  width: 112px;
+  height: 160px;
   overflow: hidden;
-  border: 3px solid #fff;
-  border-radius: 15px;
-  background: #efefef;
+  border: none;
+  background: #262424;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,20 +108,25 @@ body {
   object-fit: cover;
 }
 
-.holder--options {
+.btn-call {
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 1rem 0;
+  width: 100%;
+  background-color: transparent;
+  position: relative;
+  bottom: 40px;
 }
-.holder--options-option {
+
+.call-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: none;
   outline: none;
   border: 0px;
-  background: none;
+  background: transparent;
   color: #fff;
 }
 .holder--options-option i {

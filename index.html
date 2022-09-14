@@ -12,28 +12,45 @@
   </head>
   <body>
     <div class="container">
-      <header><i class="fas fa-film"></i> Video call</header>
-
-      <section class="holder holder--video">
-        <div id="remote" class="holder--video-remote waiting"></div>
-        <div id="me" class="holder--video-me"></div>
-      </section>
-      <section class="holder holder--options">
-        <button class="holder--options-option" id="btnCam">
-          <i class="fas fa-video"></i>
-          Cam
-        </button>
-        <button class="holder--options-option" id="btnMic">
-          <i class="fas fa-microphone"></i>
-          Mic
-        </button>
-        <button class="hidden holder--options-option" id="btnStop">
-          <i class="fas fa-window-close"></i> Leave
-        </button>
-        <button class="holder--options-option" id="btnStart">
-          <i class="fas fa-plug"></i> Join
-        </button>
-      </section>
+      <div class="content">
+        <div class="navbar">
+          <div class="nav-title">
+            <button>
+              <img src="./assets/img/Arrow.png" alt="">
+            </button>
+            <span>Nama Disini</span>
+          </div>
+          <div class="nav-btn">
+            <button>
+              <img src="./assets/img/Call.png" alt="">
+            </button>
+            <button>
+              <img src="./assets/img/Video.png" alt="">
+            </button>
+            <button>
+              <img src="./assets/img/Dots.png" alt="">
+            </button>
+          </div>
+        </div>
+        <section class="holder holder--video">
+          <div id="remote" class="holder--video-remote waiting"></div>
+          <div id="me" class="holder--video-me"></div>
+          <div class="btn-call">
+            <button class="call-btn" id="btnMic">
+              <img src="./assets/img/Call.png" alt="">
+            </button>
+            <button class="call-btn"  id="btnCam">
+              <img src="./assets/img/Video.png" alt="">
+            </button>
+            <button class="call-btn-hidden" id="btnStop">
+              <img src="./assets/img/Phone.png" alt="">
+            </button>
+            <button class="call-btn"  id="btnStart">
+              <img src="./assets/img/Phone.png" alt="">
+            </button>
+          </div>
+        </section>
+      </div>
     </div>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.2.1.js"></script>
     <script src="index.js"></script>
