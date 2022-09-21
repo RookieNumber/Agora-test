@@ -5,7 +5,7 @@ let options = {
     // Set the channel name.
     channel: "testing",
     // Pass your temp token here.
-    token: "007eJxTYPBenbT9/oEdut77Z5vqzDhh6nrgplyi/q/ZS7ekhN/iEjNSYDBKtEwxNk9MSrNMMTFJMTOzSDNIMzYwTTQ0NUg0TzMz5/qpmNztpZy8ZY4IEyMDBIL47AwlqcUlmXnpDAwAxpohQg==",
+    token: "007eJxTYEituHjC68u595vUZx2LcS1Z8vQEe3tT/He/fqOTG2ckyL1SYDBKtEwxNk9MSrNMMTFJMTOzSDNIMzYwTTQ0NUg0TzMzv7pIKzngi3ZylEwJCyMDBIL47AwlqcUlmXnpDAwAqjAkpQ==",
     // Set the user ID.
     uid: null,
   };
@@ -18,8 +18,6 @@ let options = {
   
   const btnCam = document.getElementById("btnCam");
   const btnMic = document.getElementById("btnMic");
-  const btnStart = document.getElementById("btnStart");
-  const btnStop = document.getElementById("btnStop");
   const me = document.getElementById("me");
   const remote = document.getElementById("remote");
   
@@ -57,17 +55,28 @@ let options = {
         }
       });
     });
-    btnStop.classList.remove("hidden");
-    btnStart.classList.add("hidden");
+    $('#btnStart').addClass('hidden')
+    $('#btnStop').removeClass('hidden')
   }
-  
-  btnStop.addEventListener("click", () => {
+
+  const leave = () => {
+    stopVideo();
+    stopAudio();
+    rtc.client.leave();
+    $('#btnStart').removeClass('hidden')
+    $('#btnStop').addClass('hidden')
+  };
+
+  $('#btnStop').click(function(){
     leave();
-  });
-  btnStart.addEventListener("click", () => {
+  })
+
+  $('#btnStart').click(function(){
     startBasicCall();
-  });
+  })
+
   btnCam.addEventListener("click", () => {
+    btnCam.classList.contains("active") ? stopVideo() : startVideo();
     btnCam.classList.contains("active") ? stopVideo() : startVideo();
   });
   btnMic.addEventListener("click", () => {
@@ -79,30 +88,27 @@ let options = {
     remote.classList.add("full");
   };
   
-  const leave = () => {
-    stopVideo();
-    stopAudio();
-    rtc.client.leave();
-    btnStop.classList.add("hidden");
-    btnStart.classList.remove("hidden");
-  };
+  
   
   const stopAudio = () => {
     rtc.localAudioTrack.close();
     rtc.client.unpublish(rtc.localAudioTrack);
     btnMic.classList.remove("active");
+    $('#btnMic').css('background-color','rgb(247, 0, 0)');
   };
   
   const startAudio = async () => {
     rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     rtc.client.publish(rtc.localAudioTrack);
     btnMic.classList.add("active");
+    $('#btnMic').css('background-color','grey');
   };
   
   const stopVideo = () => {
     rtc.localVideoTrack.close();
     rtc.client.unpublish(rtc.localVideoTrack);
     btnCam.classList.remove("active");
+    $('#btnCam').css('background-color','rgb(247, 0, 0)');
   };
   const startVideo = async () => {
     me.classList.add("connecting");
@@ -111,4 +117,5 @@ let options = {
     me.classList.remove("connecting");
     rtc.localVideoTrack.play("me");
     btnCam.classList.add("active");
+    $('#btnCam').css('background-color','grey');
   };
