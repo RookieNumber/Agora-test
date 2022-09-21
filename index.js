@@ -77,7 +77,6 @@ let options = {
 
   btnCam.addEventListener("click", () => {
     btnCam.classList.contains("active") ? stopVideo() : startVideo();
-    btnCam.classList.contains("active") ? stopVideo() : startVideo();
   });
   btnMic.addEventListener("click", () => {
     btnMic.classList.contains("active") ? stopAudio() : startAudio();
@@ -101,7 +100,7 @@ let options = {
     rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     rtc.client.publish(rtc.localAudioTrack);
     btnMic.classList.add("active");
-    $('#btnMic').css('background-color','grey');
+    $('#btnMic').css('background-color','rgb(69, 69, 69)');
   };
   
   const stopVideo = () => {
@@ -117,5 +116,5 @@ let options = {
     me.classList.remove("connecting");
     rtc.localVideoTrack.play("me");
     btnCam.classList.add("active");
-    $('#btnCam').css('background-color','grey');
+    $('#btnCam').css('background-color','rgb(69, 69, 69)');
   };

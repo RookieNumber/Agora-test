@@ -118,13 +118,15 @@ body {
 }
 
 #btnMic {
-  background-color: grey;
+  background-color: rgb(69, 69, 69);
+  border: solid 1px white;
   border-radius: 50px;
   cursor: pointer;
 }
 
 #btnCam {
-  background-color: grey;
+  background-color: rgb(69, 69, 69);
+  border: solid 1px white;
   border-radius: 50px;
   cursor: pointer;
 }
